@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 # Capture the demo transcript from the REAL CLI (no hand-edited output).
-# The audit step runs on the REAL vendored corpus (adr-tools ADRs,
+# The audit step runs on the REAL vendored corpus (log4brains ADRs,
 # examples/real-corpus, provenance in its README.md). The check/diff
 # steps run on the synthetic fixture corpus (examples/fixture, labelled
 # synthetic). The baseline is produced by a real audit run in this script.
+# The init step runs from inside the scratch dir with a relative path,
+# so the transcript never contains the builder's absolute paths.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SCRATCH=/tmp/adrgate-demo
@@ -19,12 +21,12 @@ BASELINE="$SCRATCH/baseline.json"
 cd "$ROOT"
 {
   echo "# adrgate demo - real CLI output"
-  echo "# (audit runs on the REAL vendored corpus: 9 ADRs from npryce/adr-tools,"
-  echo "#  commit b3279baf; check/diff run on the synthetic fixture corpus;"
+  echo "# (audit runs on the REAL vendored corpus: 9 ADRs from thomvaill/log4brains,"
+  echo "#  commit 17e32021, Apache-2.0; check/diff run on the synthetic fixture corpus;"
   echo "#  the baseline below is produced by a real audit run)"
   echo ""
   echo "$ adrgate init demo-decisions"
-  adrgate init "$SCRATCH/demo-decisions"
+  (cd "$SCRATCH" && adrgate init demo-decisions)
   echo ""
   echo "$ adrgate audit examples/real-corpus"
   adrgate audit examples/real-corpus || echo "exit: $?"

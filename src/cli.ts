@@ -33,7 +33,79 @@ function usage(): string {
     "adrgate never judges whether a decision was right. It checks only",
     "whether the record is governable: reversal conditions, cited evidence,",
     "recorded dissent, a live review date, and owner + status + date.",
+    "",
+    "Run `adrgate <command> --help` for per-command usage.",
   ].join("\n");
+}
+
+function usageFor(command: string): string {
+  switch (command) {
+    case "init":
+      return [
+        "adrgate init - scaffold a governed record + config",
+        "",
+        "Usage:",
+        "  adrgate init [dir]",
+        "",
+        "Writes adrgate.config.json and",
+        "0001-use-a-governed-decision-record.md into [dir]",
+        "(default: the current directory).",
+      ].join("\n");
+    case "audit":
+      return [
+        "adrgate audit - audit records for governability",
+        "",
+        "Usage:",
+        "  adrgate audit <path...> [--json] [--config <file>]",
+        "      [--stale-after <days>] [--save-baseline <file>]",
+        "      [--baseline <file>]",
+        "",
+        "Exit codes: 0 all GOVERNED, 1 GAPS or UNGOVERNED present,",
+        "2 input error.",
+      ].join("\n");
+    case "check":
+      return [
+        "adrgate check - CI gate over decision records",
+        "",
+        "Usage:",
+        "  adrgate check <path...> [--json] [--config <file>]",
+        "      [--stale-after <days>] [--baseline <file>]",
+        "",
+        "Same exit codes as audit: 0 all GOVERNED,",
+        "1 GAPS or UNGOVERNED present, 2 input error.",
+      ].join("\n");
+    case "diff":
+      return [
+        "adrgate diff - regressions since a baseline",
+        "",
+        "Usage:",
+        "  adrgate diff --baseline <file> <path...> [--json]",
+        "      [--config <file>]",
+        "",
+        "Exit codes: 0 no regressions, 1 regression found,",
+        "2 input error.",
+      ].join("\n");
+    case "explain":
+      return [
+        "adrgate explain - what each rule checks and why",
+        "",
+        "Usage:",
+        "  adrgate explain [D1..D5]",
+        "",
+        "With no rule id, lists all five rules. With D1..D5,",
+        "prints that rule in full, with its Nvidia timeline anchor.",
+      ].join("\n");
+    default:
+      return usage();
+  }
+}
+
+function wantsHelp(args: string[]): boolean {
+  return args.includes("--help") || args.includes("-h");
+}
+
+function wantsVersion(args: string[]): boolean {
+  return args.includes("--version") || args.includes("-v");
 }
 
 interface Flags {
@@ -82,6 +154,15 @@ function main(): number {
 
   try {
     if (command === "init") {
+      const rest = argv.slice(1);
+      if (wantsHelp(rest)) {
+        console.log(usageFor("init"));
+        return 0;
+      }
+      if (wantsVersion(rest)) {
+        console.log(`adrgate ${VERSION}`);
+        return 0;
+      }
       const dir = argv[1] ?? ".";
       const written = runInit(dir);
       if (written.length === 0) {
@@ -99,11 +180,29 @@ function main(): number {
     }
 
     if (command === "explain") {
+      const rest = argv.slice(1);
+      if (wantsHelp(rest)) {
+        console.log(usageFor("explain"));
+        return 0;
+      }
+      if (wantsVersion(rest)) {
+        console.log(`adrgate ${VERSION}`);
+        return 0;
+      }
       console.log(explainText(argv[1]));
       return 0;
     }
 
     if (command === "audit" || command === "check") {
+      const rest = argv.slice(1);
+      if (wantsHelp(rest)) {
+        console.log(usageFor(command));
+        return 0;
+      }
+      if (wantsVersion(rest)) {
+        console.log(`adrgate ${VERSION}`);
+        return 0;
+      }
       const flags = parseFlags(argv.slice(1));
       if (flags.positional.length === 0) {
         throw new Error(`Usage: adrgate ${command} <path...>`);
@@ -140,6 +239,15 @@ function main(): number {
     }
 
     if (command === "diff") {
+      const rest = argv.slice(1);
+      if (wantsHelp(rest)) {
+        console.log(usageFor("diff"));
+        return 0;
+      }
+      if (wantsVersion(rest)) {
+        console.log(`adrgate ${VERSION}`);
+        return 0;
+      }
       const flags = parseFlags(argv.slice(1));
       if (!flags.baseline) {
         throw new Error("Usage: adrgate diff --baseline <file> <path...>");

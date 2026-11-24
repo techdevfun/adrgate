@@ -21,9 +21,9 @@ node dist/cli.js audit examples/fixture
 
 ## Real corpus (public ADRs, vendored)
 
-`examples/real-corpus/` holds 9 real ADRs from the adr-tools project
-(`npryce/adr-tools`, commit b3279baf9be2207d1a4f4bbd608fd0b591c72aee,
-fetched 2026-11-24). See its README.md for provenance. Audit it live:
+`examples/real-corpus/` holds 9 real ADRs from the log4brains project
+(`thomvaill/log4brains`, commit 17e32021a8c5130386f17e921d4efa6da7709a66,
+fetched 2026-11-24, Apache-2.0). See its README.md for provenance. Audit it live:
 
 ```sh
 node dist/cli.js audit examples/real-corpus

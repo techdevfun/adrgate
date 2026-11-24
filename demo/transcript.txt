@@ -1,189 +1,191 @@
 # adrgate demo - real CLI output
-# (audit runs on the REAL vendored corpus: 9 ADRs from npryce/adr-tools,
-#  commit b3279baf; check/diff run on the synthetic fixture corpus;
+# (audit runs on the REAL vendored corpus: 9 ADRs from thomvaill/log4brains,
+#  commit 17e32021, Apache-2.0; check/diff run on the synthetic fixture corpus;
 #  the baseline below is produced by a real audit run)
 
 $ adrgate init demo-decisions
 init: wrote:
-  /tmp/adrgate-demo/demo-decisions/adrgate.config.json
-  /tmp/adrgate-demo/demo-decisions/0001-use-a-governed-decision-record.md
+  demo-decisions/adrgate.config.json
+  demo-decisions/0001-use-a-governed-decision-record.md
 Edit the owner, the evidence link, and the review date, then run: adrgate audit .
 
 $ adrgate audit examples/real-corpus
 adrgate 0.1.0 - decision-record governability audit
 
-/home/hatch/workspace/github-repo-factory/adrgate-build/examples/real-corpus/0001-record-architecture-decisions.md [GENERIC_ADR] - UNGOVERNED (1/5)
+examples/real-corpus/20200925-multi-packages-architecture-in-a-monorepo-with-yarn-and-lerna.md [MADR] - UNGOVERNED (1/5)
   FAIL D1 record states reversal conditions
 No reversal condition found. Add a section stating under what conditions this decision would be
     reversed.
   PASS D2 record cites checkable evidence
-evidence: "We will use Architecture Decision Records, as described by Michael Nygard in this
-    article: http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-de"
+evidence: "- [A Beginner's Guide to Lerna with Yarn
+    Workspaces](https://medium.com/@jsilvax/a-workflow-guide-for-lerna-with-yarn-workspaces-60f97481149d)"
 Link plus a date or version is present. Note: adrgate checks presence and format only; it does not
     verify that the link supports the claim.
   FAIL D3 record shows dissent (alternatives + a rejected option)
-No 'Considered Options' or 'Alternatives' section found. List the options considered and why at
-    least one was rejected.
+    evidence: "- Monolith"
+Options are listed but none is rejected with a reason. Record why at least one option was not
+    chosen.
   FAIL D4 record has a live review date
-No review date recorded. The decision is 3938 days old; the stale-after threshold is 180 days. Add a
+No review date recorded. The decision is 2251 days old; the stale-after threshold is 180 days. Add a
     review date.
   FAIL D5 record names owner, status, and decision date
-    evidence: "Accepted | 2016-02-12"
-Missing: owner. A governable record names who decided, when, and whether it is proposed, accepted,
-    or superseded.
+    evidence: "2020-09-25"
+Missing: owner, status. A governable record names who decided, when, and whether it is proposed,
+    accepted, or superseded.
 
-/home/hatch/workspace/github-repo-factory/adrgate-build/examples/real-corpus/0002-implement-as-shell-scripts.md [GENERIC_ADR] - UNGOVERNED (0/5)
-  FAIL D1 record states reversal conditions
-No reversal condition found. Add a section stating under what conditions this decision would be
-    reversed.
-  FAIL D2 record cites checkable evidence
-No cited link found. Cite checkable evidence (data, benchmark, incident, measurement) with a link.
-  FAIL D3 record shows dissent (alternatives + a rejected option)
-No 'Considered Options' or 'Alternatives' section found. List the options considered and why at
-    least one was rejected.
-  FAIL D4 record has a live review date
-No review date recorded. The decision is 3938 days old; the stale-after threshold is 180 days. Add a
-    review date.
-  FAIL D5 record names owner, status, and decision date
-    evidence: "Accepted | 2016-02-12"
-Missing: owner. A governable record names who decided, when, and whether it is proposed, accepted,
-    or superseded.
-
-/home/hatch/workspace/github-repo-factory/adrgate-build/examples/real-corpus/0003-single-command-with-subcommands.md [GENERIC_ADR] - UNGOVERNED (0/5)
-  FAIL D1 record states reversal conditions
-No reversal condition found. Add a section stating under what conditions this decision would be
-    reversed.
-  FAIL D2 record cites checkable evidence
-No cited link found. Cite checkable evidence (data, benchmark, incident, measurement) with a link.
-  FAIL D3 record shows dissent (alternatives + a rejected option)
-No 'Considered Options' or 'Alternatives' section found. List the options considered and why at
-    least one was rejected.
-  FAIL D4 record has a live review date
-No review date recorded. The decision is 3938 days old; the stale-after threshold is 180 days. Add a
-    review date.
-  FAIL D5 record names owner, status, and decision date
-    evidence: "Accepted | 2016-02-12"
-Missing: owner. A governable record names who decided, when, and whether it is proposed, accepted,
-    or superseded.
-
-/home/hatch/workspace/github-repo-factory/adrgate-build/examples/real-corpus/0004-markdown-format.md [GENERIC_ADR] - UNGOVERNED (1/5)
+examples/real-corpus/20200925-use-prettier-eslint-airbnb-for-the-code-style.md [MADR] - UNGOVERNED (1/5)
   FAIL D1 record states reversal conditions
 No reversal condition found. Add a section stating under what conditions this decision would be
     reversed.
   PASS D2 record cites checkable evidence
-evidence: "Record architecture decisions in [Markdown
-    format](https://daringfireball.net/projects/markdown/)."
+evidence: "- Airbnb code style is widely used (see [npm
+    trends](https://www.npmtrends.com/eslint-config-airbnb-vs-eslint-config-google-vs-standard-vs-eslint-config-standar"
 Link plus a date or version is present. Note: adrgate checks presence and format only; it does not
     verify that the link supports the claim.
   FAIL D3 record shows dissent (alternatives + a rejected option)
-No 'Considered Options' or 'Alternatives' section found. List the options considered and why at
-    least one was rejected.
+    evidence: "- Prettier only"
+Options are listed but none is rejected with a reason. Record why at least one option was not
+    chosen.
   FAIL D4 record has a live review date
-No review date recorded. The decision is 3938 days old; the stale-after threshold is 180 days. Add a
+No review date recorded. The decision is 2251 days old; the stale-after threshold is 180 days. Add a
     review date.
   FAIL D5 record names owner, status, and decision date
-    evidence: "Accepted | 2016-02-12"
-Missing: owner. A governable record names who decided, when, and whether it is proposed, accepted,
-    or superseded.
+    evidence: "2020-09-25"
+Missing: owner, status. A governable record names who decided, when, and whether it is proposed,
+    accepted, or superseded.
 
-/home/hatch/workspace/github-repo-factory/adrgate-build/examples/real-corpus/0005-help-comments.md [GENERIC_ADR] - UNGOVERNED (0/5)
-  FAIL D1 record states reversal conditions
-No reversal condition found. Add a section stating under what conditions this decision would be
-    reversed.
-  FAIL D2 record cites checkable evidence
-No cited link found. Cite checkable evidence (data, benchmark, incident, measurement) with a link.
-  FAIL D3 record shows dissent (alternatives + a rejected option)
-No 'Considered Options' or 'Alternatives' section found. List the options considered and why at
-    least one was rejected.
-  FAIL D4 record has a live review date
-No review date recorded. The decision is 3937 days old; the stale-after threshold is 180 days. Add a
-    review date.
-  FAIL D5 record names owner, status, and decision date
-    evidence: "Accepted | 2016-02-13"
-Missing: owner. A governable record names who decided, when, and whether it is proposed, accepted,
-    or superseded.
-
-/home/hatch/workspace/github-repo-factory/adrgate-build/examples/real-corpus/0006-packaging-and-distribution-in-other-version-control-repositories.md [GENERIC_ADR] - UNGOVERNED (1/5)
+examples/real-corpus/20200926-use-the-adr-number-as-its-unique-id.md [MADR] - UNGOVERNED (1/5)
   FAIL D1 record states reversal conditions
 No reversal condition found. Add a section stating under what conditions this decision would be
     reversed.
   PASS D2 record cites checkable evidence
-    evidence: "`yum` and Mac OS X users use [Homebrew](http://brew.sh)."
+evidence: "- Other ADR tools like [adr-tools](https://github.com/npryce/adr-tools) already use the
+    number as a unique ID"
 Link plus a date or version is present. Note: adrgate checks presence and format only; it does not
     verify that the link supports the claim.
   FAIL D3 record shows dissent (alternatives + a rejected option)
-No 'Considered Options' or 'Alternatives' section found. List the options considered and why at
-    least one was rejected.
+evidence: "- ADR number (ie. filename prefixed number, example:
+    `0001-use-markdown-architectural-decision-records.md`)"
+Options are listed but none is rejected with a reason. Record why at least one option was not
+    chosen.
   FAIL D4 record has a live review date
-No review date recorded. The decision is 3934 days old; the stale-after threshold is 180 days. Add a
+No review date recorded. The decision is 2250 days old; the stale-after threshold is 180 days. Add a
     review date.
   FAIL D5 record names owner, status, and decision date
-    evidence: "Accepted | 2016-02-16"
-Missing: owner. A governable record names who decided, when, and whether it is proposed, accepted,
-    or superseded.
+    evidence: "2020-09-26"
+Missing: owner, status. A governable record names who decided, when, and whether it is proposed,
+    accepted, or superseded.
 
-/home/hatch/workspace/github-repo-factory/adrgate-build/examples/real-corpus/0007-invoke-adr-config-executable-to-get-configuration.md [GENERIC_ADR] - UNGOVERNED (0/5)
-  FAIL D1 record states reversal conditions
-No reversal condition found. Add a section stating under what conditions this decision would be
-    reversed.
-  FAIL D2 record cites checkable evidence
-No cited link found. Cite checkable evidence (data, benchmark, incident, measurement) with a link.
-  FAIL D3 record shows dissent (alternatives + a rejected option)
-No 'Considered Options' or 'Alternatives' section found. List the options considered and why at
-    least one was rejected.
-  FAIL D4 record has a live review date
-No review date recorded. The decision is 3629 days old; the stale-after threshold is 180 days. Add a
-    review date.
-  FAIL D5 record names owner, status, and decision date
-    evidence: "Accepted | 2016-12-17"
-Missing: owner. A governable record names who decided, when, and whether it is proposed, accepted,
-    or superseded.
-
-/home/hatch/workspace/github-repo-factory/adrgate-build/examples/real-corpus/0008-use-iso-8601-format-for-dates.md [GENERIC_ADR] - UNGOVERNED (0/5)
-  FAIL D1 record states reversal conditions
-No reversal condition found. Add a section stating under what conditions this decision would be
-    reversed.
-  FAIL D2 record cites checkable evidence
-No cited link found. Cite checkable evidence (data, benchmark, incident, measurement) with a link.
-  FAIL D3 record shows dissent (alternatives + a rejected option)
-No 'Considered Options' or 'Alternatives' section found. List the options considered and why at
-    least one was rejected.
-  FAIL D4 record has a live review date
-No review date recorded. The decision is 3563 days old; the stale-after threshold is 180 days. Add a
-    review date.
-  FAIL D5 record names owner, status, and decision date
-    evidence: "Accepted | 2017-02-21"
-Missing: owner. A governable record names who decided, when, and whether it is proposed, accepted,
-    or superseded.
-
-/home/hatch/workspace/github-repo-factory/adrgate-build/examples/real-corpus/0009-help-scripts.md [GENERIC_ADR] - UNGOVERNED (0/5)
-  FAIL D1 record states reversal conditions
-No reversal condition found. Add a section stating under what conditions this decision would be
-    reversed.
-  FAIL D2 record cites checkable evidence
-No cited link found. Cite checkable evidence (data, benchmark, incident, measurement) with a link.
-  FAIL D3 record shows dissent (alternatives + a rejected option)
-No 'Considered Options' or 'Alternatives' section found. List the options considered and why at
-    least one was rejected.
-  FAIL D4 record has a live review date
-No review date recorded. The decision is 3073 days old; the stale-after threshold is 180 days. Add a
-    review date.
-  FAIL D5 record names owner, status, and decision date
-    evidence: "Accepted | 2018-06-26"
-Missing: owner. A governable record names who decided, when, and whether it is proposed, accepted,
-    or superseded.
-
-/home/hatch/workspace/github-repo-factory/adrgate-build/examples/real-corpus/README.md [UNKNOWN] - UNKNOWN (0/5)
+examples/real-corpus/20200927-avoid-default-exports.md [UNKNOWN] - UNKNOWN (0/5)
   format not recognised (needs Status/Context/Decision headings, MADR headings, or RFC frontmatter). Listed, not failed.
 
-summary: 10 record(s) - 0 GOVERNED, 0 GAPS, 9 UNGOVERNED, 1 UNKNOWN
+examples/real-corpus/20201016-use-the-adr-slug-as-its-unique-id.md [MADR] - UNGOVERNED (0/5)
+  FAIL D1 record states reversal conditions
+No reversal condition found. Add a section stating under what conditions this decision would be
+    reversed.
+  FAIL D2 record cites checkable evidence
+No cited link found. Cite checkable evidence (data, benchmark, incident, measurement) with a link.
+  FAIL D3 record shows dissent (alternatives + a rejected option)
+No 'Considered Options' or 'Alternatives' section found. List the options considered and why at
+    least one was rejected.
+  FAIL D4 record has a live review date
+No review date recorded. The decision is 2230 days old; the stale-after threshold is 180 days. Add a
+    review date.
+  FAIL D5 record names owner, status, and decision date
+    evidence: "2020-10-16"
+Missing: owner, status. A governable record names who decided, when, and whether it is proposed,
+    accepted, or superseded.
+
+examples/real-corpus/20201026-the-core-api-is-responsible-for-enhancing-the-adr-markdown-body-with-mdx.md [MADR] - UNGOVERNED (0/5)
+  FAIL D1 record states reversal conditions
+No reversal condition found. Add a section stating under what conditions this decision would be
+    reversed.
+  FAIL D2 record cites checkable evidence
+No cited link found. Cite checkable evidence (data, benchmark, incident, measurement) with a link.
+  FAIL D3 record shows dissent (alternatives + a rejected option)
+    evidence: "- Option 1: the UI is responsible"
+Options are listed but none is rejected with a reason. Record why at least one option was not
+    chosen.
+  FAIL D4 record has a live review date
+No review date recorded. The decision is 2220 days old; the stale-after threshold is 180 days. Add a
+    review date.
+  FAIL D5 record names owner, status, and decision date
+    evidence: "2020-10-26"
+Missing: owner, status. A governable record names who decided, when, and whether it is proposed,
+    accepted, or superseded.
+
+examples/real-corpus/20201103-use-lunr-for-search.md [MADR] - UNGOVERNED (1/5)
+  FAIL D1 record states reversal conditions
+No reversal condition found. Add a section stating under what conditions this decision would be
+    reversed.
+  PASS D2 record cites checkable evidence
+    evidence: "<https://fusejs.io/>"
+Link plus a date or version is present. Note: adrgate checks presence and format only; it does not
+    verify that the link supports the claim.
+  FAIL D3 record shows dissent (alternatives + a rejected option)
+    evidence: "- Option 1: Fuse.js"
+Options are listed but none is rejected with a reason. Record why at least one option was not
+    chosen.
+  FAIL D4 record has a live review date
+No review date recorded. The decision is 2212 days old; the stale-after threshold is 180 days. Add a
+    review date.
+  FAIL D5 record names owner, status, and decision date
+    evidence: "2020-11-03"
+Missing: owner, status. A governable record names who decided, when, and whether it is proposed,
+    accepted, or superseded.
+
+examples/real-corpus/20210113-distribute-log4brains-as-a-global-npm-package.md [MADR] - UNGOVERNED (1/5)
+  FAIL D1 record states reversal conditions
+No reversal condition found. Add a section stating under what conditions this decision would be
+    reversed.
+  PASS D2 record cites checkable evidence
+evidence: "Technical Story:
+    <https://github.com/thomvaill/log4brains/issues/14#issuecomment-750154907>"
+Link plus a date or version is present. Note: adrgate checks presence and format only; it does not
+    verify that the link supports the claim.
+  FAIL D3 record shows dissent (alternatives + a rejected option)
+No 'Considered Options' or 'Alternatives' section found. List the options considered and why at
+    least one was rejected.
+  FAIL D4 record has a live review date
+No review date recorded. The decision is 2141 days old; the stale-after threshold is 180 days. Add a
+    review date.
+  FAIL D5 record names owner, status, and decision date
+    evidence: "2021-01-13"
+Missing: owner, status. A governable record names who decided, when, and whether it is proposed,
+    accepted, or superseded.
+
+examples/real-corpus/20241217-switch-back-to-github-flow.md [MADR] - UNGOVERNED (1/5)
+  FAIL D1 record states reversal conditions
+No reversal condition found. Add a section stating under what conditions this decision would be
+    reversed.
+  PASS D2 record cites checkable evidence
+evidence: "Specifically, **Lerna**, which we use for managing our monorepo, does not integrate well
+    with Git Flow processes ([Lerna issue #2023](https://github.com/lerna/l"
+Link plus a date or version is present. Note: adrgate checks presence and format only; it does not
+    verify that the link supports the claim.
+  FAIL D3 record shows dissent (alternatives + a rejected option)
+evidence: "- Option 1: Patch Lerna to keep the Simplified Git Flow (as described in the link above)"
+Options are listed but none is rejected with a reason. Record why at least one option was not
+    chosen.
+  FAIL D4 record has a live review date
+No review date recorded. The decision is 707 days old; the stale-after threshold is 180 days. Add a
+    review date.
+  FAIL D5 record names owner, status, and decision date
+    evidence: "2024-12-17"
+Missing: owner, status. A governable record names who decided, when, and whether it is proposed,
+    accepted, or superseded.
+
+examples/real-corpus/README.md [UNKNOWN] - UNKNOWN (0/5)
+  format not recognised (needs Status/Context/Decision headings, MADR headings, or RFC frontmatter). Listed, not failed.
+
+summary: 10 record(s) - 0 GOVERNED, 0 GAPS, 8 UNGOVERNED, 2 UNKNOWN
 verdict: NOT GOVERNED - fix the failing rules above before merging.
 exit: 1
 
 $ adrgate check examples/fixture
 adrgate 0.1.0 - decision-record governability audit
 
-/home/hatch/workspace/github-repo-factory/adrgate-build/examples/fixture/gaps.md [MADR] - GAPS (3/5)
+examples/fixture/gaps.md [MADR] - GAPS (3/5)
   FAIL D1 record states reversal conditions
 No reversal condition found. Add a section stating under what conditions this decision would be
     reversed.
@@ -201,7 +203,7 @@ No review date recorded. The decision is 0 days old; the stale-after threshold i
     evidence: "owner: Grace Hopper; status: Accepted; date: 2026-11-24"
     Owner, status, and decision date are all present.
 
-/home/hatch/workspace/github-repo-factory/adrgate-build/examples/fixture/governed.md [MADR] - GOVERNED (5/5)
+examples/fixture/governed.md [MADR] - GOVERNED (5/5)
   PASS D1 record states reversal conditions
     evidence: "We reverse this decision if Postgres session latency exceeds 50 ms at p95"
     Reversal condition stated.
@@ -219,7 +221,7 @@ Link plus a date or version is present. Note: adrgate checks presence and format
     evidence: "owner: Ada Lovelace; status: Accepted; date: 2026-11-24"
     Owner, status, and decision date are all present.
 
-/home/hatch/workspace/github-repo-factory/adrgate-build/examples/fixture/ungoverned.md [GENERIC_ADR] - UNGOVERNED (1/5)
+examples/fixture/ungoverned.md [GENERIC_ADR] - UNGOVERNED (1/5)
   FAIL D1 record states reversal conditions
 No reversal condition found. Add a section stating under what conditions this decision would be
     reversed.
@@ -235,7 +237,7 @@ No review date recorded. The decision is 0 days old; the stale-after threshold i
     evidence: "owner: Alan Turing; status: Accepted; date: 2026-11-24"
     Owner, status, and decision date are all present.
 
-/home/hatch/workspace/github-repo-factory/adrgate-build/examples/fixture/unknown.md [UNKNOWN] - UNKNOWN (0/5)
+examples/fixture/unknown.md [UNKNOWN] - UNKNOWN (0/5)
   format not recognised (needs Status/Context/Decision headings, MADR headings, or RFC frontmatter). Listed, not failed.
 
 summary: 4 record(s) - 1 GOVERNED, 1 GAPS, 1 UNGOVERNED, 1 UNKNOWN

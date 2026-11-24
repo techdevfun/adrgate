@@ -72,23 +72,28 @@ All commands accept `--json` (audit / check / diff). `audit` accepts
 `--save-baseline <file>`; `check` accepts `--baseline <file>` to compare.
 Config lives in `adrgate.config.json` (`staleAfterDays`, `requiredRules`).
 
-## Real evidence: the adr-tools ADRs are 9/9 UNGOVERNED
+## Real evidence: the log4brains ADRs are 8/8 UNGOVERNED
 
-The repo vendors nine real ADRs from the adr-tools project
-(`npryce/adr-tools`, commit `b3279baf`, fetched 2026-11-24) under
-`examples/real-corpus/` with a provenance README. Auditing them:
+The repo vendors nine real ADRs from the log4brains project
+(`thomvaill/log4brains`, commit `17e32021`, fetched 2026-11-24) under
+`examples/real-corpus/` with a provenance README. The upstream repo is
+licensed Apache-2.0 (verified via the GitHub API); the records are
+reproduced verbatim under that licence. Auditing them:
 
 ```sh
 node dist/cli.js audit examples/real-corpus
-# summary: 10 record(s) - 0 GOVERNED, 0 GAPS, 9 UNGOVERNED, 1 UNKNOWN
-# (the 10th record is the corpus README, listed as UNKNOWN, never failed)
+# summary: 10 record(s) - 0 GOVERNED, 0 GAPS, 8 UNGOVERNED, 2 UNKNOWN
+# (the 10th record is the corpus README, listed as UNKNOWN, never failed;
+#  the other UNKNOWN is a real three-line record with no Context section)
 ```
 
-Only 3 of 45 rule checks pass. D1 reversal: 0/9. D2 evidence: 3/9. D3
-dissent: 0/9. D4 review date: 0/9. D5 owner: 0/9 (all nine have a status
-and a date, none names an owner). These are the canonical Nygard-format
-records, and they predate every governability rule adrgate checks. That is
-the point: even the reference implementation's own ADRs are ungoverned by
+Only 6 of 40 rule checks pass. D1 reversal: 0/8. D2 evidence: 6/8.
+D3 dissent: 0/8. D4 review date: 0/8. D5 owner: 0/8 (none names an
+owner; the records carry status as a `- Status:` bullet line, which the
+checker does not recognise as a status section - a heading-heuristic
+limit, disclosed below). These are MADR-format records written between
+2020 and 2024, and they predate every governability rule adrgate checks.
+That is the point: even a mature project's own ADRs are ungoverned by
 this bar, which is why the bar is worth automating.
 
 Synthetic fixtures for tests live in `examples/fixture/` (seeded, labelled
@@ -117,6 +122,38 @@ synthetic): one GOVERNED, one GAPS, one UNGOVERNED, one UNKNOWN record.
   the tool audits the record, not the history.
 - 100% local: no network in scan or check, no telemetry, no data leaves
   the repo. The audit trail is the git history plus the baseline file.
+
+## Risk register
+
+- R1 (MEDIUM) - False positives on free-form ADRs: a well-governed
+  record in unusual prose can fail a heading heuristic. Mitigation:
+  format detection runs first, every finding carries its evidence quote,
+  and unparseable files get verdict UNKNOWN instead of a false fail.
+- R2 (MEDIUM) - Scope confusion: users expect the tool to judge whether
+  the decision was right. Mitigation: the boundary is stated in the
+  README, in `explain`, and in every rule name ("record states...", not
+  "decision is...").
+- R3 (LOW) - D2 is presence-only: a cited link may not support the
+  claim. Mitigation: disclosed in Honest limits and in `explain D2`; a
+  `--verify-links` HEAD check is roadmap P2, not v0.1.0.
+- R4 (LOW) - Nvidia facts drift: the inquiry or the share figure moves
+  after publish. Mitigation: the timeline is cited with sources and
+  dated "as of 23/11/2026"; the tool holds no Nvidia facts except in
+  `explain` (dated).
+- R5 (LOW) - Real-corpus fetch fails (GitHub rate limit / network).
+  Mitigation: the corpus is vendored into `examples/real-corpus/` with
+  provenance (repo + commit + fetch date) at build time; the live test
+  soft-skips on 403/429; the vendored corpus keeps the demo reproducible.
+- R6 (LOW) - Thin-CLI overlap with claimtrace (a sibling tool on a
+  different axis: decision records vs agent claims). Mitigation: the
+  different axis and evidence are stated in "Where rivals beat us".
+- R7 (LOW, closed 24/11/2026) - Vendored-corpus licence grey zone: the
+  first build vendored ADRs from a repository with no licence
+  (`NOASSERTION`), which is a copyright grey zone for redistribution in
+  a public MIT repo. Handling: the corpus was swapped on 24/11/2026 to
+  nine ADRs from `thomvaill/log4brains`, verified Apache-2.0 via the
+  GitHub API, with provenance recorded in
+  `examples/real-corpus/README.md`. No unlicensed file remains vendored.
 
 ## Where rivals beat us
 

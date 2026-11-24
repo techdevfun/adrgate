@@ -37,6 +37,49 @@ test("cli: --version prints 0.1.0", () => {
   assert.ok(r.stdout.includes("0.1.0"));
 });
 
+test("cli: every subcommand accepts --help and -h, exit 0", () => {
+  const cases = [
+    ["init", "init"],
+    ["audit", "audit"],
+    ["check", "check"],
+    ["diff", "diff"],
+    ["explain", "explain"],
+  ];
+  for (const [cmd, word] of cases) {
+    for (const flag of ["--help", "-h"]) {
+      const r = run([cmd, flag]);
+      assert.equal(r.status, 0, `${cmd} ${flag} must exit 0`);
+      assert.ok(r.stdout.includes(word), `${cmd} ${flag} must print its usage`);
+      assert.ok(
+        !r.stderr.includes("Unknown option"),
+        `${cmd} ${flag} must not report an unknown option`,
+      );
+    }
+  }
+});
+
+test("cli: explain --help prints usage, not 'Unknown rule'", () => {
+  const r = run(["explain", "--help"]);
+  assert.equal(r.status, 0);
+  assert.ok(r.stdout.includes("explain"));
+  assert.ok(!r.stdout.includes("Unknown rule"));
+  assert.ok(!r.stderr.includes("Unknown rule"));
+});
+
+test("cli: every subcommand accepts --version, exit 0", () => {
+  for (const cmd of ["init", "audit", "check", "diff", "explain"]) {
+    const r = run([cmd, "--version"]);
+    assert.equal(r.status, 0, `${cmd} --version must exit 0`);
+    assert.ok(r.stdout.includes("adrgate 0.1.0"));
+  }
+});
+
+test("cli: -h at top level exits 0", () => {
+  const r = run(["-h"]);
+  assert.equal(r.status, 0);
+  assert.ok(r.stdout.includes("init"));
+});
+
 test("cli: unknown command exits 2", () => {
   const r = run(["frobnicate"]);
   assert.equal(r.status, 2);
@@ -139,14 +182,19 @@ test("cli: diff flags a regression when a governed record loses D1", () => {
   rmSync(dir, { recursive: true, force: true });
 });
 
-test("cli: audit of the real corpus finds 9 real UNGOVERNED records", () => {
+test("cli: audit of the real corpus finds 8 real UNGOVERNED records", () => {
   const r = run(["audit", REAL]);
   assert.equal(r.status, 1);
   // 9 ADRs plus the corpus README, which is listed as UNKNOWN, not failed.
+  // One short ADR (20200927) is also UNKNOWN: no Context section.
   assert.ok(
     r.stdout.includes(
-      "10 record(s) - 0 GOVERNED, 0 GAPS, 9 UNGOVERNED, 1 UNKNOWN",
+      "10 record(s) - 0 GOVERNED, 0 GAPS, 8 UNGOVERNED, 2 UNKNOWN",
     ),
   );
-  assert.ok(r.stdout.includes("0001-record-architecture-decisions.md"));
+  assert.ok(
+    r.stdout.includes(
+      "20200925-multi-packages-architecture-in-a-monorepo-with-yarn-and-lerna.md",
+    ),
+  );
 });

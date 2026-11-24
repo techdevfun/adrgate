@@ -1,3 +1,4 @@
+import { relative } from "node:path";
 import type { AuditReport, DiffResult, RecordAudit } from "./types.js";
 
 /** Word-wrap a line to `width` columns, continuing on `indent`. */
@@ -48,8 +49,12 @@ export function renderHuman(report: AuditReport): string {
 
 export function renderRecord(r: RecordAudit): string {
   const lines: string[] = [];
+  // Human output shows the path relative to the working directory, so a
+  // demo transcript never leaks the builder's absolute paths. JSON output
+  // keeps the full path; baselines already use relative keys.
+  const display = relative(process.cwd(), r.file) || r.file;
   lines.push(
-    `${r.file} [${r.format}] - ${r.verdict} (${r.passed}/${r.required})`,
+    `${display} [${r.format}] - ${r.verdict} (${r.passed}/${r.required})`,
   );
   if (r.verdict === "UNKNOWN") {
     lines.push(

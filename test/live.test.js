@@ -8,7 +8,7 @@ import { join } from "node:path";
 const ROOT = new URL("..", import.meta.url).pathname;
 const CLI = join(ROOT, "dist", "cli.js");
 const REAL = join(ROOT, "examples", "real-corpus");
-const COMMIT = "b3279baf9be2207d1a4f4bbd608fd0b591c72aee";
+const COMMIT = "17e32021a8c5130386f17e921d4efa6da7709a66";
 
 function run(args) {
   return spawnSync(process.execPath, [CLI, ...args], {
@@ -59,22 +59,23 @@ test("live: org repo techdevfun/adrgate is 404 or 200 (ours after flip)", async 
   );
 });
 
-test("live: audit of the vendored real corpus finds 9 real UNGOVERNED records", () => {
+test("live: audit of the vendored real corpus finds 8 real UNGOVERNED records", () => {
   const r = run(["audit", REAL]);
   assert.equal(r.status, 1);
   // 9 ADRs plus the corpus README, which is listed as UNKNOWN, not failed.
+  // One short ADR (20200927) is also UNKNOWN: no Context section.
   assert.ok(
     r.stdout.includes(
-      "10 record(s) - 0 GOVERNED, 0 GAPS, 9 UNGOVERNED, 1 UNKNOWN",
+      "10 record(s) - 0 GOVERNED, 0 GAPS, 8 UNGOVERNED, 2 UNKNOWN",
     ),
   );
-  // Real findings: only 3 of 45 rule checks pass (D2 on 0001, 0004, 0006).
+  // Real findings: only 6 of 40 rule checks pass (D2 on six records).
   const passes = r.stdout.split("  PASS ").length - 1;
-  assert.equal(passes, 3);
+  assert.equal(passes, 6);
 });
 
 test("live: vendored ADR matches the pinned upstream commit byte-for-byte", async (t) => {
-  const url = `https://raw.githubusercontent.com/npryce/adr-tools/${COMMIT}/doc/adr/0001-record-architecture-decisions.md`;
+  const url = `https://raw.githubusercontent.com/thomvaill/log4brains/${COMMIT}/docs/adr/20200925-multi-packages-architecture-in-a-monorepo-with-yarn-and-lerna.md`;
   let res;
   try {
     res = await fetchOk(url);
@@ -89,13 +90,37 @@ test("live: vendored ADR matches the pinned upstream commit byte-for-byte", asyn
   assert.equal(res.status, 200);
   const remote = await res.text();
   const local = readFileSync(
-    join(REAL, "0001-record-architecture-decisions.md"),
+    join(
+      REAL,
+      "20200925-multi-packages-architecture-in-a-monorepo-with-yarn-and-lerna.md",
+    ),
     "utf8",
   );
   const hash = (s) => createHash("sha256").update(s).digest("hex");
   assert.equal(
     hash(remote),
     hash(local),
-    "vendored 0001 must match upstream at the pinned commit",
+    "vendored 20200925-multi-packages must match upstream at the pinned commit",
+  );
+});
+
+test("live: upstream corpus repo is Apache-2.0 licensed", async (t) => {
+  let res;
+  try {
+    res = await fetchOk("https://api.github.com/repos/thomvaill/log4brains");
+  } catch {
+    t.skip("no network access to api.github.com");
+    return;
+  }
+  if (isSoftSkip(res)) {
+    t.skip(`GitHub API returned ${res.status}`);
+    return;
+  }
+  assert.equal(res.status, 200);
+  const data = await res.json();
+  assert.equal(
+    data.license && data.license.spdx_id,
+    "Apache-2.0",
+    "corpus upstream must stay clearly licensed (Apache-2.0)",
   );
 });

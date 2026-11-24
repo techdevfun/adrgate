@@ -103,7 +103,7 @@ title = Image.new("RGB", (W, H), BG)
 d = ImageDraw.Draw(title)
 d.text((14, 120), "adrgate - can this decision be reversed?", font=bold, fill=GREEN)
 d.text((14, 170), "1. init: scaffold a governed decision record", font=font, fill=FG)
-d.text((14, 200), "2. audit: 9 REAL ADRs from adr-tools - 0 GOVERNED, 9 UNGOVERNED", font=font, fill=FG)
+d.text((14, 200), "2. audit: 9 REAL ADRs from log4brains - 0 GOVERNED, 8 UNGOVERNED", font=font, fill=FG)
 d.text((14, 230), "3. check: a CI gate - exit 1 when a record has gaps", font=font, fill=FG)
 d.text((14, 260), "4. diff: regressions vs a baseline receipt", font=font, fill=FG)
 d.text((14, 290), "5. explain: every rule, with the Nvidia timeline anchor", font=font, fill=FG)
@@ -113,17 +113,17 @@ for _ in range(20):
     save(title.copy())
 
 
-# Caption card for the audit -> check transition (0.75s at 20 fps).
-CAPTION_FRAMES = 15
+# Caption card for the audit -> check transition (0.4s at 20 fps).
+CAPTION_FRAMES = 8
 
 
 def caption_card():
     img = Image.new("RGB", (W, H), BG)
     d = ImageDraw.Draw(img)
     d.text((14, 120), "2. audit - the real corpus, scored rule by rule", font=bold, fill=GREEN)
-    d.text((14, 170), "9 real ADRs, 45 rule checks, only 3 pass", font=font, fill=FG)
-    d.text((14, 200), "D1 reversal 0/9 - D3 dissent 0/9 - D4 review date 0/9", font=font, fill=FG)
-    d.text((14, 230), "even the reference tool's own ADRs are ungoverned", font=font, fill=FG)
+    d.text((14, 170), "9 real ADRs, 40 rule checks, only 6 pass", font=font, fill=FG)
+    d.text((14, 200), "D1 reversal 0/8 - D3 dissent 0/8 - D4 review date 0/8", font=font, fill=FG)
+    d.text((14, 230), "even a mature project's own ADRs are ungoverned", font=font, fill=FG)
     return img
 
 
@@ -141,6 +141,7 @@ def extra_holds(line: str) -> int:
 
 canvas: list[tuple[str, tuple]] = []
 command_count = 0
+current_command = ""
 for line in lines:
     color = color_for(line)
     # Caption card at the audit -> check transition, before the screen
@@ -156,10 +157,16 @@ for line in lines:
         canvas = []
     if line.startswith("$"):
         command_count += 1
+        parts = line.split()
+        current_command = parts[1] if len(parts) > 1 else ""
     # One frame per line + one hold: ~2 frames/line keeps the total
     # near 25-30 s at 20 fps without holding frames in memory.
+    # The check segment scrolls a long fixture output, so it renders
+    # at 1 frame/line: at 2 frames/line the mostly-empty viewport at
+    # the start of the segment reads as dead air.
     save(render(canvas + [(line, color)]))
-    save(render(canvas + [(line, color)]))
+    if current_command != "check":
+        save(render(canvas + [(line, color)]))
     canvas.append((line, color))
     for _ in range(extra_holds(line)):
         save(render(canvas))
